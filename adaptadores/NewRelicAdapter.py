@@ -1,16 +1,11 @@
 from flask import Flask, request
-from flask_classful import FlaskView, route
 
 import requests
 import json
 
-class NewRelicAdapter(FlaskView):
+class NewRelicAdapter():
     
-    route_base = '/'
-
-    @route('/chat', methods=['POST'])
-    def ingest(self):
-        json_data = request.get_json(force=True)
+    def ingest(self, json_data):
         custom_json = ""
         
         METRICA = json_data.get('METRICA')

@@ -1,0 +1,37 @@
+{
+  "AppID": [
+    {
+      "label": "AppID",
+      "provider": null,
+      "plan": "lite",
+      "name": "AppID",
+      "tags": [
+        "security",
+        "mobile",
+        "ibm_created",
+        "lite",
+        "ibmcloud-alias"
+      ],
+      "instance_name": "AppID",
+      "binding_name": null,
+      "credentials": {
+        "apikey": "4D5e0YRiSPtrJTZfm1Vb9PHhq5NQ8sCk9ann42GvkFDk",
+        "appidServiceEndpoint": "https://us-south.appid.cloud.ibm.com",
+        "clientId": "0be16709-acca-4c51-b62f-c4ed5ef54bd0",
+        "discoveryEndpoint": "https://us-south.appid.cloud.ibm.com/oauth/v4/18b4dbb6-0f1b-47b8-ba2d-c60da5d55126/.well-known/openid-configuration",
+        "iam_apikey_description": "Auto-generated for binding 0be16709-acca-4c51-b62f-c4ed5ef54bd0",
+        "iam_apikey_name": "AppID",
+        "iam_role_crn": "crn:v1:bluemix:public:iam::::serviceRole:Reader",
+        "iam_serviceid_crn": "crn:v1:bluemix:public:iam-identity::a/d3233e4f7ccecf58b7b2e477adfccb18::serviceid:ServiceId-34247a0e-fbbf-46db-aa32-dac7ca213cd6",
+        "managementUrl": "https://us-south.appid.cloud.ibm.com/management/v4/18b4dbb6-0f1b-47b8-ba2d-c60da5d55126",
+        "oauthServerUrl": "https://us-south.appid.cloud.ibm.com/oauth/v4/18b4dbb6-0f1b-47b8-ba2d-c60da5d55126",
+        "profilesUrl": "https://us-south.appid.cloud.ibm.com",
+        "secret": "ZDc4MzI3MzEtOTZiNi00N2VhLTk4NjgtNzVlZDA3MDc1NzM1",
+        "tenantId": "18b4dbb6-0f1b-47b8-ba2d-c60da5d55126",
+        "version": 4
+      },
+      "syslog_drain_url": null,
+      "volume_mounts": []
+    }
+  ]
+}
