@@ -2,6 +2,7 @@ from flask import Flask, request
 from adaptadores.NewRelicAdapter import NewRelicAdapter
 from flask_httpauth import HTTPBasicAuth
 from flask_pyoidc.flask_pyoidc import OIDCAuthentication
+from flask_pyoidc.provider_configuration import ProviderConfiguration, ClientMetadata
 
 import requests
 import os
@@ -13,10 +14,22 @@ port = os.getenv("PORT")
 vcapEnv = ''
 
 if 'VCAP_SERVICES' in os.environ:
-    vcapEnv = json.loads(os.environ['VCAP_SERVICES'])
+    vcapEnv = json.loads(os.environ['VCAP_SERVICES'])    
+    app.config.update({'SERVER_NAME': json.loads(os.environ['VCAP_APPLICATION'])['uris'][0],
+                      'SECRET_KEY': 'ZDc4MzI3MzEtOTZiNi00N2VhLTk4NjgtNzVlZDA3MDc1NzM1',
+                      'PREFERRED_URL_SCHEME': 'https',
+                      'PERMANENT_SESSION_LIFETIME': 1800, # session time in second (30 minutes)
+                      'DEBUG': False})
+    
 else:
-    with open('configAppId.json') as json_file:
-        vcapEnv = json.load(json_file)
+    with open('/Users/jmbuiles/Desktop/WatsonWS/chatbots/configAppId.json') as json_file:
+        vcapEnv = json.load(json_file)        
+    app.config.update({'SERVER_NAME': '0.0.0.0:5000',
+                      'SECRET_KEY': 'ZDc4MzI3MzEtOTZiNi00N2VhLTk4NjgtNzVlZDA3MDc1NzM1',
+                      'PREFERRED_URL_SCHEME': 'http',
+                      'PERMANENT_SESSION_LIFETIME': 2592000, # session time in seconds (30 days)
+                      'DEBUG': True})   
+        
     
 appIDInfo = vcapEnv['AppID'][0]['credentials']
 
@@ -33,12 +46,19 @@ client_info={
     "client_secret": appIDInfo['secret']
 }
 
-auth = OIDCAuthentication(app, provider_configuration_info=provider_config, client_registration_info=client_info, userinfo_endpoint_method=None)
+appID_clientinfo = ClientMetadata(client_id=appIDInfo['clientId'],client_secret=appIDInfo['secret'])
+appID_config = ProviderConfiguration(issuer=appIDInfo['oauthServerUrl'],client_metadata=appID_clientinfo)
+
+auth = OIDCAuthentication({'default': appID_config}, app)
+#auth = OIDCAuthentication(app, provider_configuration_info=provider_config, client_registration_info=client_info, userinfo_endpoint_method=None)
 
 @app.route('/chat', methods=['POST'])
-#@auth.oidc_auth
-@auth.login_required
+@auth.oidc_auth('default')
+#@auth.login_required
 def ingest():
+    
+    username = request.json.get('username')
+    password = request.json.get('password')
     
     print(authenticate(username, password))
     nr = NewRelicAdapter()
@@ -47,9 +67,10 @@ def ingest():
     return nr.ingest(json_data)
 
 
-@auth.verify_password
+#@auth.verify_password
 def authenticate(username, password):
     if username and password:
+        
         if username == 'jmbuiles' and password == 'jmbuiles':
             return True
         else:
